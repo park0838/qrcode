@@ -6,7 +6,7 @@
         
     <!-- 메인 페이지 -->
     <url>
-        <loc>https://yourdomain.com/</loc>
+        <loc>https://park0838.github.io/qrcode/</loc>
         <lastmod>2025-09-09</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
@@ -14,26 +14,10 @@
     
     <!-- 인덱스 페이지 -->
     <url>
-        <loc>https://yourdomain.com/index.html</loc>
+        <loc>https://park0838.github.io/qrcode/index.html</loc>
         <lastmod>2025-09-09</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
-    </url>
-    
-    <!-- 오프라인 버전 (선택사항) -->
-    <url>
-        <loc>https://yourdomain.com/offline-qr-generator.html</loc>
-        <lastmod>2025-09-09</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <!-- 간단한 버전 (선택사항) -->
-    <url>
-        <loc>https://yourdomain.com/simple-working-qr.html</loc>
-        <lastmod>2025-09-09</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
     </url>
     
 </urlset>
