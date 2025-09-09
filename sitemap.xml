@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <!-- 메인 QR 생성기 페이지 (한국어) -->
+    <!-- Main QR Code Generator (English) -->
     <url>
         <loc>https://park0838.github.io/qrcode/</loc>
         <lastmod>2025-01-20</lastmod>
@@ -8,15 +8,7 @@
         <priority>1.0</priority>
     </url>
     
-    <!-- 메인 QR 생성기 페이지 (영어) -->
-    <url>
-        <loc>https://park0838.github.io/qrcode/en/</loc>
-        <lastmod>2025-01-20</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
-    </url>
-    
-    <!-- 오프라인 QR 생성기 (고급 기능) -->
+    <!-- Offline QR Code Generator -->
     <url>
         <loc>https://park0838.github.io/qrcode/offline-qr-generator.html</loc>
         <lastmod>2025-01-20</lastmod>
@@ -24,7 +16,7 @@
         <priority>0.8</priority>
     </url>
     
-    <!-- 간단한 QR 생성기 (가벼운 버전) -->
+    <!-- Simple QR Code Generator -->
     <url>
         <loc>https://park0838.github.io/qrcode/simple-working-qr.html</loc>
         <lastmod>2025-01-20</lastmod>
@@ -32,7 +24,7 @@
         <priority>0.6</priority>
     </url>
     
-    <!-- 최소 기능 QR 생성기 -->
+    <!-- Minimal QR Code Generator -->
     <url>
         <loc>https://park0838.github.io/qrcode/minimal.html</loc>
         <lastmod>2025-01-20</lastmod>
@@ -40,7 +32,7 @@
         <priority>0.4</priority>
     </url>
     
-    <!-- robots.txt (검색엔진 가이드) -->
+    <!-- robots.txt -->
     <url>
         <loc>https://park0838.github.io/qrcode/robots.txt</loc>
         <lastmod>2025-01-20</lastmod>
