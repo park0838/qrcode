@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR 코드 생성기 - 작동하는 버전</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 15px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-bottom: 20px;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        .qr-display {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .qr-code {
+            max-width: 100%;
+            height: auto;
+            border: 5px solid #f0f0f0;
+            border-radius: 10px;
+        }
+        .download-btn {
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.2);
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .success {
+            color: #51cf66;
+            text-align: center;
+            padding: 15px;
+            background: rgba(81, 207, 102, 0.2);
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .debug {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔲 QR 코드 생성기</h1>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('url')">📱 URL/링크</button>
+            <button class="tab-btn" onclick="switchTab('wifi')">📶 WiFi</button>
+        </div>
+        
+        <!-- URL 탭 -->
+        <div class="tab-content active" id="url-tab">
+            <div class="input-group">
+                <label for="url-input">URL 또는 텍스트</label>
+                <input type="text" id="url-input" placeholder="https://example.com 또는 텍스트 입력...">
+            </div>
+            <button class="generate-btn" onclick="generateURL()">QR 코드 생성</button>
+            <div id="url-result"></div>
+        </div>
+        
+        <!-- WiFi 탭 -->
+        <div class="tab-content" id="wifi-tab">
+            <div class="input-group">
+                <label for="wifi-ssid">네트워크 이름 (SSID)</label>
+                <input type="text" id="wifi-ssid" placeholder="WiFi 이름">
+            </div>
+            <div class="input-group">
+                <label for="wifi-password">비밀번호</label>
+                <input type="password" id="wifi-password" placeholder="WiFi 비밀번호">
+            </div>
+            <div class="input-group">
+                <label for="wifi-security">보안 방식</label>
+                <select id="wifi-security">
+                    <option value="WPA">WPA/WPA2</option>
+                    <option value="WEP">WEP</option>
+                    <option value="nopass">비밀번호 없음</option>
+                </select>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="wifi-hidden">
+                <label for="wifi-hidden">숨겨진 네트워크</label>
+            </div>
+            <button class="generate-btn" onclick="generateWiFi()">WiFi QR 코드 생성</button>
+            <div id="wifi-result"></div>
+        </div>
+        
+        <div class="debug" id="debug">
+            <strong>디버그 로그:</strong><br>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            console.log(message);
+            const debug = document.getElementById('debug');
+            debug.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '<br>';
+            debug.scrollTop = debug.scrollHeight;
+        }
+        
+        function switchTab(tab) {
+            // 모든 탭 버튼과 콘텐츠 비활성화
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭 활성화
+            event.target.classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+            
+            log(`${tab} 탭으로 전환됨`);
+        }
+        
+        function generateURL() {
+            log('URL QR 생성 시작...');
+            const input = document.getElementById('url-input').value.trim();
+            const resultDiv = document.getElementById('url-result');
+            
+            if (!input) {
+                resultDiv.innerHTML = '<div class="error">URL 또는 텍스트를 입력해주세요!</div>';
+                return;
+            }
+            
+            log('입력된 텍스트: ' + input);
+            
+            // QR.js 라이브러리 사용 (순수 JavaScript)
+            try {
+                const qrCode = generateQRCodeData(input);
+                displayQRCode(resultDiv, qrCode, input, 'url');
+                log('✅ URL QR 코드 생성 성공');
+            } catch (error) {
+                log('❌ QR 생성 실패: ' + error.message);
+                resultDiv.innerHTML = '<div class="error">QR 코드 생성 실패: ' + error.message + '</div>';
+            }
+        }
+        
+        function generateWiFi() {
+            log('WiFi QR 생성 시작...');
+            const ssid = document.getElementById('wifi-ssid').value.trim();
+            const password = document.getElementById('wifi-password').value;
+            const security = document.getElementById('wifi-security').value;
+            const hidden = document.getElementById('wifi-hidden').checked;
+            const resultDiv = document.getElementById('wifi-result');
+            
+            if (!ssid) {
+                resultDiv.innerHTML = '<div class="error">WiFi 이름을 입력해주세요!</div>';
+                return;
+            }
+            
+            // WiFi QR 문자열 생성
+            const wifiString = `WIFI:T:${security};S:${escapeString(ssid)};P:${escapeString(password)};H:${hidden ? 'true' : 'false'};;`;
+            log('WiFi 문자열: ' + wifiString);
+            
+            try {
+                const qrCode = generateQRCodeData(wifiString);
+                displayQRCode(resultDiv, qrCode, `WiFi: ${ssid}`, 'wifi');
+                log('✅ WiFi QR 코드 생성 성공');
+            } catch (error) {
+                log('❌ WiFi QR 생성 실패: ' + error.message);
+                resultDiv.innerHTML = '<div class="error">WiFi QR 코드 생성 실패: ' + error.message + '</div>';
+            }
+        }
+        
+        function escapeString(str) {
+            return str.replace(/([\\";,:])/g, '\\\\$1');
+        }
+        
+        function generateQRCodeData(text) {
+            // 간단한 QR 코드 데이터 생성 (실제로는 라이브러리 사용)
+            // 여기서는 QR Server API 사용 (무료, 안정적)
+            const size = 300;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
+            return qrUrl;
+        }
+        
+        function displayQRCode(container, qrUrl, description, type) {
+            container.innerHTML = `
+                <div class="qr-display">
+                    <h3>${description}</h3>
+                    <img src="${qrUrl}" alt="QR Code" class="qr-code" onload="log('QR 이미지 로드 완료')" onerror="log('❌ QR 이미지 로드 실패')">
+                    <br>
+                    <button class="download-btn" onclick="downloadQR('${qrUrl}', '${type}')">
+                        📥 QR 코드 다운로드
+                    </button>
+                </div>
+                <div class="success">✅ QR 코드가 성공적으로 생성되었습니다!</div>
+            `;
+        }
+        
+        function downloadQR(qrUrl, type) {
+            log('QR 코드 다운로드 시작...');
+            const link = document.createElement('a');
+            link.href = qrUrl;
+            link.download = `${type}-qr-code.png`;
+            link.click();
+            log('✅ QR 코드 다운로드 완료');
+        }
+        
+        // 페이지 로드시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            log('QR 코드 생성기 로드 완료 ✅');
+            log('QR Server API 사용 중 (Google Charts 대신)');
+        });
+    </script>
+</body>
+</html>

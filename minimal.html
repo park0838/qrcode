@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal QR Test</title>
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; }
+        button { padding: 15px 30px; font-size: 16px; margin: 10px; cursor: pointer; }
+        canvas { border: 1px solid #000; margin: 10px; }
+        input { padding: 10px; font-size: 16px; width: 300px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Minimal QR Generator Test</h1>
+    
+    <h2>Method 1: qrcode.js Library</h2>
+    <button id="test-btn-1">Generate Test QR (qrcode.js)</button>
+    <br>
+    <canvas id="qr-canvas-1" width="200" height="200"></canvas>
+    
+    <h2>Method 2: Google Charts API</h2>
+    <button id="test-btn-2">Generate Test QR (Google Charts)</button>
+    <br>
+    <img id="qr-image-2" style="display: none; border: 1px solid #000;">
+    
+    <h2>Method 3: Interactive</h2>
+    <input type="text" id="text-input" placeholder="Enter text here" value="Hello World!">
+    <button id="generate-btn">Generate QR</button>
+    <br>
+    <canvas id="qr-canvas-3" width="200" height="200"></canvas>
+    <br>
+    <img id="qr-image-3" style="display: none; border: 1px solid #000;">
+    
+    <h2>Debug Info</h2>
+    <div id="debug-info" style="background: #f0f0f0; padding: 10px; font-family: monospace;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        function log(message) {
+            console.log(message);
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '<br>';
+        }
+        
+        log('Script started');
+        
+        // Method 1: qrcode.js
+        document.getElementById('test-btn-1').onclick = function() {
+            log('Button 1 clicked - testing qrcode.js');
+            
+            if (typeof QRCode === 'undefined') {
+                log('ERROR: QRCode library not loaded');
+                alert('QRCode library not loaded!');
+                return;
+            }
+            
+            log('QRCode library available, generating...');
+            const canvas = document.getElementById('qr-canvas-1');
+            
+            QRCode.toCanvas(canvas, 'Test with qrcode.js - ' + Date.now(), {
+                width: 200,
+                margin: 2,
+                color: { dark: '#000000', light: '#FFFFFF' }
+            }, function(error) {
+                if (error) {
+                    log('ERROR: ' + error.message);
+                    alert('QR generation failed: ' + error.message);
+                } else {
+                    log('SUCCESS: QR code generated with qrcode.js');
+                }
+            });
+        };
+        
+        // Method 2: Google Charts API
+        document.getElementById('test-btn-2').onclick = function() {
+            log('Button 2 clicked - testing Google Charts API');
+            
+            const text = 'Test with Google Charts - ' + Date.now();
+            const encodedText = encodeURIComponent(text);
+            const size = '200x200';
+            const url = `https://chart.googleapis.com/chart?chs=${size}&cht=qr&chl=${encodedText}`;
+            
+            const img = document.getElementById('qr-image-2');
+            img.src = url;
+            img.style.display = 'block';
+            
+            img.onload = function() {
+                log('SUCCESS: QR code generated with Google Charts API');
+            };
+            
+            img.onerror = function() {
+                log('ERROR: Failed to load QR from Google Charts API');
+            };
+        };
+        
+        // Method 3: Interactive
+        document.getElementById('generate-btn').onclick = function() {
+            const text = document.getElementById('text-input').value || 'Default Text';
+            log('Generate button clicked with text: ' + text);
+            
+            // Try qrcode.js first
+            if (typeof QRCode !== 'undefined') {
+                log('Using qrcode.js for interactive generation');
+                const canvas = document.getElementById('qr-canvas-3');
+                
+                QRCode.toCanvas(canvas, text, {
+                    width: 200,
+                    margin: 2
+                }, function(error) {
+                    if (error) {
+                        log('qrcode.js failed: ' + error.message);
+                        // Fallback to Google Charts
+                        useGoogleCharts();
+                    } else {
+                        log('SUCCESS: Interactive QR generated with qrcode.js');
+                        document.getElementById('qr-image-3').style.display = 'none';
+                    }
+                });
+            } else {
+                log('qrcode.js not available, using Google Charts');
+                useGoogleCharts();
+            }
+            
+            function useGoogleCharts() {
+                const encodedText = encodeURIComponent(text);
+                const url = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodedText}`;
+                const img = document.getElementById('qr-image-3');
+                img.src = url;
+                img.style.display = 'block';
+                img.onload = () => log('SUCCESS: Interactive QR generated with Google Charts');
+                img.onerror = () => log('ERROR: Both methods failed');
+            }
+        };
+        
+        // Check library loading
+        window.addEventListener('load', function() {
+            log('Window loaded');
+            
+            if (typeof QRCode !== 'undefined') {
+                log('QRCode library loaded successfully');
+                log('QRCode type: ' + typeof QRCode);
+                log('QRCode.toCanvas type: ' + typeof QRCode.toCanvas);
+            } else {
+                log('QRCode library NOT loaded');
+                
+                // Try to reload the script
+                setTimeout(function() {
+                    log('Retrying library check after 2 seconds...');
+                    if (typeof QRCode !== 'undefined') {
+                        log('QRCode library now available');
+                    } else {
+                        log('QRCode library still not available - using Google Charts fallback');
+                    }
+                }, 2000);
+            }
+        });
+        
+        log('Script setup complete');
+    </script>
+</body>
+</html>

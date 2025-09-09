@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Charts QR Test</title>
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; }
+        canvas { border: 2px solid #000; margin: 10px; }
+        button { padding: 15px 30px; font-size: 16px; margin: 10px; cursor: pointer; }
+        .test { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>Google Charts QR Test</h1>
+    
+    <div class="test">
+        <h2>Test 1: Direct Google Charts Image</h2>
+        <button onclick="showDirectImage()">Show Direct QR Image</button>
+        <br>
+        <img id="direct-img" style="display: none; border: 2px solid #000;">
+    </div>
+    
+    <div class="test">
+        <h2>Test 2: Google Charts to Canvas</h2>
+        <button onclick="generateCanvasQR()">Generate QR on Canvas</button>
+        <br>
+        <canvas id="qr-canvas" width="260" height="260"></canvas>
+    </div>
+    
+    <div class="test">
+        <h2>Test 3: WiFi QR</h2>
+        <button onclick="generateWifiQR()">Generate WiFi QR</button>
+        <br>
+        <canvas id="wifi-canvas" width="260" height="260"></canvas>
+    </div>
+    
+    <div class="test">
+        <h2>Debug Info</h2>
+        <div id="debug" style="background: #f0f0f0; padding: 10px; font-family: monospace; white-space: pre-wrap;"></div>
+    </div>
+
+    <script>
+        function log(message) {
+            console.log(message);
+            document.getElementById('debug').textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+        }
+        
+        function showDirectImage() {
+            log('Testing direct Google Charts image...');
+            const img = document.getElementById('direct-img');
+            const text = 'Hello World - Direct Test';
+            const url = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(text)}`;
+            
+            img.onload = () => log('✅ Direct image loaded successfully');
+            img.onerror = () => log('❌ Direct image failed to load');
+            
+            img.src = url;
+            img.style.display = 'block';
+            log('Image URL: ' + url);
+        }
+        
+        function generateCanvasQR() {
+            log('Testing Google Charts to Canvas...');
+            const canvas = document.getElementById('qr-canvas');
+            const ctx = canvas.getContext('2d');
+            const text = 'Canvas Test - ' + Date.now();
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, 260, 260);
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, 260, 260);
+            
+            const img = new Image();
+            const url = `https://chart.googleapis.com/chart?chs=260x260&cht=qr&chl=${encodeURIComponent(text)}`;
+            
+            img.onload = () => {
+                log('✅ Canvas QR image loaded, drawing to canvas...');
+                try {
+                    ctx.drawImage(img, 0, 0, 260, 260);
+                    log('✅ Successfully drawn to canvas');
+                } catch (error) {
+                    log('❌ Error drawing to canvas: ' + error.message);
+                }
+            };
+            
+            img.onerror = () => log('❌ Canvas QR image failed to load');
+            
+            img.src = url;
+            log('Canvas QR URL: ' + url);
+        }
+        
+        function generateWifiQR() {
+            log('Testing WiFi QR generation...');
+            const canvas = document.getElementById('wifi-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // WiFi QR string format
+            const ssid = 'TestNetwork';
+            const password = 'testpass123';
+            const security = 'WPA';
+            const hidden = false;
+            const wifiString = `WIFI:T:${security};S:${ssid};P:${password};H:${hidden ? 'true' : 'false'};;`;
+            
+            log('WiFi string: ' + wifiString);
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, 260, 260);
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, 260, 260);
+            
+            const img = new Image();
+            const url = `https://chart.googleapis.com/chart?chs=260x260&cht=qr&chl=${encodeURIComponent(wifiString)}`;
+            
+            img.onload = () => {
+                log('✅ WiFi QR image loaded, drawing to canvas...');
+                try {
+                    ctx.drawImage(img, 0, 0, 260, 260);
+                    log('✅ WiFi QR successfully drawn to canvas');
+                } catch (error) {
+                    log('❌ Error drawing WiFi QR to canvas: ' + error.message);
+                }
+            };
+            
+            img.onerror = () => log('❌ WiFi QR image failed to load');
+            
+            img.src = url;
+            log('WiFi QR URL: ' + url);
+        }
+        
+        log('Google Charts QR test page loaded');
+        
+        // Auto-test on page load
+        setTimeout(() => {
+            log('Running auto-tests...');
+            showDirectImage();
+            setTimeout(generateCanvasQR, 1000);
+            setTimeout(generateWifiQR, 2000);
+        }, 1000);
+    </script>
+</body>
+</html>

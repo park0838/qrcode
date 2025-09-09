@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Debug Test</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: white;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        canvas {
+            border: 2px solid #000;
+            margin: 10px 0;
+        }
+        .log {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Code Generation Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Library Loading Test</h2>
+        <div id="library-status">Testing...</div>
+        <div class="log" id="library-log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Manual QR Generation Test</h2>
+        <button onclick="testBasicQR()">Generate Test QR</button>
+        <canvas id="test-canvas" width="200" height="200"></canvas>
+        <div class="log" id="qr-log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Input-Based QR Generation</h2>
+        <input type="text" id="test-input" placeholder="Enter text" value="Hello World">
+        <button onclick="generateFromInput()">Generate QR from Input</button>
+        <canvas id="input-canvas" width="200" height="200"></canvas>
+        <div class="log" id="input-log"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Console Output</h2>
+        <button onclick="clearLogs()">Clear Logs</button>
+        <div class="log" id="console-log"></div>
+    </div>
+
+    <!-- Load QRCode library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function logToPage(message, type = 'log') {
+            const logElement = document.getElementById('console-log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${type.toUpperCase()}: ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToPage(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logToPage(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            logToPage(args.join(' '), 'warn');
+        };
+        
+        // Test functions
+        function updateLibraryStatus() {
+            const statusDiv = document.getElementById('library-status');
+            const logDiv = document.getElementById('library-log');
+            
+            if (typeof QRCode !== 'undefined') {
+                statusDiv.innerHTML = '<span style="color: green;">✅ QRCode library loaded successfully!</span>';
+                logDiv.textContent = `QRCode object available: ${typeof QRCode}\nQRCode.toCanvas: ${typeof QRCode.toCanvas}\n`;
+                console.log('QRCode library loaded successfully');
+                return true;
+            } else {
+                statusDiv.innerHTML = '<span style="color: red;">❌ QRCode library NOT loaded</span>';
+                logDiv.textContent = 'QRCode is undefined\n';
+                console.error('QRCode library not loaded');
+                return false;
+            }
+        }
+        
+        function testBasicQR() {
+            const canvas = document.getElementById('test-canvas');
+            const logDiv = document.getElementById('qr-log');
+            
+            console.log('testBasicQR called');
+            logDiv.textContent = 'Starting QR generation test...\n';
+            
+            if (typeof QRCode === 'undefined') {
+                logDiv.textContent += 'ERROR: QRCode library not available\n';
+                console.error('QRCode library not available');
+                return;
+            }
+            
+            console.log('Calling QRCode.toCanvas with test data');
+            logDiv.textContent += 'Calling QRCode.toCanvas...\n';
+            
+            QRCode.toCanvas(canvas, 'Test QR Code - 123456', {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function(error) {
+                if (error) {
+                    logDiv.textContent += `ERROR: ${error.message}\n`;
+                    console.error('QR generation error:', error);
+                } else {
+                    logDiv.textContent += 'SUCCESS: QR code generated!\n';
+                    console.log('QR code generated successfully');
+                }
+            });
+        }
+        
+        function generateFromInput() {
+            const input = document.getElementById('test-input');
+            const canvas = document.getElementById('input-canvas');
+            const logDiv = document.getElementById('input-log');
+            const text = input.value || 'Default Text';
+            
+            console.log('generateFromInput called with text:', text);
+            logDiv.textContent = `Generating QR for: "${text}"\n`;
+            
+            if (typeof QRCode === 'undefined') {
+                logDiv.textContent += 'ERROR: QRCode library not available\n';
+                return;
+            }
+            
+            QRCode.toCanvas(canvas, text, {
+                width: 200,
+                margin: 2
+            }, function(error) {
+                if (error) {
+                    logDiv.textContent += `ERROR: ${error.message}\n`;
+                    console.error('Input QR generation error:', error);
+                } else {
+                    logDiv.textContent += 'SUCCESS: Input QR generated!\n';
+                    console.log('Input QR generated successfully');
+                }
+            });
+        }
+        
+        function clearLogs() {
+            document.getElementById('console-log').textContent = '';
+            document.getElementById('library-log').textContent = '';
+            document.getElementById('qr-log').textContent = '';
+            document.getElementById('input-log').textContent = '';
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            console.log('Page loaded, checking QRCode library...');
+            
+            // Check immediately
+            if (!updateLibraryStatus()) {
+                // Wait a bit and check again
+                setTimeout(() => {
+                    console.log('Rechecking QRCode library after delay...');
+                    updateLibraryStatus();
+                }, 1000);
+            }
+            
+            // Auto-generate test QR after 2 seconds
+            setTimeout(() => {
+                console.log('Auto-generating test QR...');
+                testBasicQR();
+            }, 2000);
+        });
+        
+        // Check for window errors
+        window.addEventListener('error', function(e) {
+            console.error('Window error:', e.error);
+            logToPage(`Window error: ${e.error.message}`, 'error');
+        });
+        
+        console.log('Debug script loaded');
+    </script>
+</body>
+</html>
