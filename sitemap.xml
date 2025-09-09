@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <!-- 메인 QR 생성기 페이지 -->
+    <!-- 메인 QR 생성기 페이지 (한국어) -->
     <url>
         <loc>https://park0838.github.io/qrcode/</loc>
+        <lastmod>2025-01-20</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- 메인 QR 생성기 페이지 (영어) -->
+    <url>
+        <loc>https://park0838.github.io/qrcode/en/</loc>
         <lastmod>2025-01-20</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
