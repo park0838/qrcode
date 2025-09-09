@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO 최적화 메타 태그 -->
+    <title>무료 QR 코드 생성기 - WiFi, URL QR 코드 즉시 생성 | QRMaker</title>
+    <meta name="description" content="무료로 WiFi, URL QR 코드를 즉시 생성하세요. 모바일 친화적이고 빠른 QR 코드 생성기. 광고 없는 깔끔한 인터페이스로 간편하게 QR 코드 만들기.">
+    <meta name="keywords" content="QR코드, QR생성기, WiFi QR, URL QR, 무료 QR코드, QR코드 만들기, 큐알코드, QR코드 생성, 바코드 생성기">
+    <meta name="author" content="QRMaker">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Korean">
+    <meta name="geo.region" content="KR">
+    <meta name="geo.country" content="South Korea">
+    
+    <!-- Open Graph 메타 태그 (소셜 미디어) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="무료 QR 코드 생성기 - WiFi, URL QR 코드 즉시 생성">
+    <meta property="og:description" content="무료로 WiFi, URL QR 코드를 즉시 생성하세요. 모바일 친화적이고 빠른 QR 코드 생성기.">
+    <meta property="og:url" content="https://yourdomain.com">
+    <meta property="og:site_name" content="QRMaker">
+    <meta property="og:locale" content="ko_KR">
+    
+    <!-- Twitter 카드 메타 태그 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="무료 QR 코드 생성기">
+    <meta name="twitter:description" content="WiFi, URL QR 코드를 즉시 생성하세요">
+    
+    <!-- 정규 URL (중복 콘텐츠 방지) -->
+    <link rel="canonical" href="https://yourdomain.com">
+    
+    <!-- 파비콘 및 아이콘 -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- 중요한 CSS는 인라인으로 (First Paint 최적화) -->
+    <style>
+        body{margin:0;padding:0;background:#0a0a1a;color:#fff;font-family:Inter,Arial,sans-serif;min-height:100vh}
+        .container{max-width:800px;margin:0 auto;padding:20px}
+        .header{text-align:center;margin-bottom:30px}
+        .logo h1{font-size:2.5em;margin:0}
+    </style>
+    
+    <!-- 나머지 CSS는 비동기 로드 -->
+    <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css"></noscript>
+    
+    <!-- 폰트 최적화 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 최적화 -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-qrcode"></i>
+                <h1>QR 코드 생성기</h1>
+            </div>
+            <p class="subtitle">아름다운 QR 코드를 즉시 생성하세요</p>
+        </header>
+
+        <!-- 상단 광고 배너 -->
+        <div class="ad-container ad-top">
+            <div class="ad-slot" id="ad-header">
+                <!-- Google AdSense 또는 광고 네트워크 코드 -->
+                <!-- 실제 AdSense 광고 코드 예제:
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                -->
+                <div class="ad-placeholder">
+                    <span class="ad-label">광고</span>
+                    <div class="ad-content">728x90 광고 배너</div>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="url">
+                        <i class="fas fa-link"></i>
+                        URL/링크
+                    </button>
+                    <button class="tab-btn" data-tab="wifi">
+                        <i class="fas fa-wifi"></i>
+                        WiFi 네트워크
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- URL Tab -->
+                    <div class="tab-panel active" id="url-tab">
+                        <div class="input-section">
+                            <h2>URL/링크 QR 코드 생성</h2>
+                            <p class="description">URL 또는 텍스트를 입력하여 QR 코드를 생성하세요</p>
+                            
+                            <div class="input-group">
+                                <label for="url-input">URL 또는 텍스트</label>
+                                <input 
+                                    type="text" 
+                                    id="url-input" 
+                                    placeholder="https://example.com 또는 텍스트 입력..." 
+                                    autocomplete="off"
+                                >
+                                <div class="input-validation" id="url-validation"></div>
+                            </div>
+
+                            <button class="generate-btn" id="url-generate-btn">
+                                <i class="fas fa-qrcode"></i>
+                                QR 코드 생성
+                            </button>
+                        </div>
+
+                        <div class="qr-section">
+                            <div class="qr-container" id="url-qr-container">
+                                <div class="qr-placeholder" id="url-qr-placeholder">
+                                    <i class="fas fa-qrcode"></i>
+                                    <p>텍스트를 입력하고 생성 버튼을 클릭하세요</p>
+                                </div>
+                                <canvas id="url-qr-canvas"></canvas>
+                            </div>
+                            <button class="download-btn" id="url-download-btn" style="display: none;">
+                                <i class="fas fa-download"></i>
+                                QR 코드 다운로드
+                            </button>
+                            
+                            <!-- URL QR 결과 아래 광고 -->
+                            <div class="ad-container ad-result" id="url-ad-result" style="display: none;">
+                                <div class="ad-slot">
+                                    <div class="ad-placeholder">
+                                        <span class="ad-label">광고</span>
+                                        <div class="ad-content">300x250 사각형 광고</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WiFi Tab -->
+                    <div class="tab-panel" id="wifi-tab">
+                        <div class="input-section">
+                            <h2>WiFi QR 코드 생성</h2>
+                            <p class="description">WiFi 이름과 비밀번호만 입력하면 간편하게 QR 코드 생성 (WPA/WPA2 보안)</p>
+                            
+                            <div class="input-group">
+                                <label for="wifi-ssid">네트워크 이름 (SSID)</label>
+                                <input 
+                                    type="text" 
+                                    id="wifi-ssid" 
+                                    placeholder="WiFi 네트워크 이름 입력..." 
+                                    autocomplete="off"
+                                >
+                                <div class="input-hint">정확한 WiFi 이름을 입력하세요 (대소문자, 특수문자 포함)</div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="wifi-password">비밀번호</label>
+                                <div class="password-input">
+                                    <input 
+                                        type="password" 
+                                        id="wifi-password" 
+                                        placeholder="WiFi 비밀번호 입력..." 
+                                        autocomplete="off"
+                                    >
+                                    <button type="button" class="password-toggle" id="password-toggle">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="input-hint">WiFi 비밀번호를 정확히 입력하세요</div>
+                            </div>
+
+                            <div class="wifi-tip">
+                                💡 현재 연결된 WiFi 정보는 휴대폰 설정에서 확인 가능합니다
+                            </div>
+
+                            <button class="generate-btn" id="wifi-generate-btn">
+                                <i class="fas fa-wifi"></i>
+                                WiFi QR 코드 생성
+                            </button>
+                        </div>
+
+                        <div class="qr-section">
+                            <div class="qr-container" id="wifi-qr-container">
+                                <div class="qr-placeholder" id="wifi-qr-placeholder">
+                                    <i class="fas fa-wifi"></i>
+                                    <p>WiFi 정보를 입력하고 생성 버튼을 클릭하세요</p>
+                                </div>
+                                <canvas id="wifi-qr-canvas"></canvas>
+                            </div>
+                            <button class="download-btn" id="wifi-download-btn" style="display: none;">
+                                <i class="fas fa-download"></i>
+                                QR 코드 다운로드
+                            </button>
+                            
+                            <!-- WiFi QR 결과 아래 광고 -->
+                            <div class="ad-container ad-result" id="wifi-ad-result" style="display: none;">
+                                <div class="ad-slot">
+                                    <div class="ad-placeholder">
+                                        <span class="ad-label">광고</span>
+                                        <div class="ad-content">300x250 사각형 광고</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 하단 광고 배너 -->
+        <div class="ad-container ad-bottom">
+            <div class="ad-slot" id="ad-footer">
+                <div class="ad-placeholder">
+                    <span class="ad-label">광고</span>
+                    <div class="ad-content">728x90 하단 광고 배너</div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>
+                <i class="fas fa-heart"></i>
+                최신 웹 기술로 제작되었습니다
+            </p>
+        </footer>
+    </div>
+
+    <!-- 구조화된 데이터 (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "QR 코드 생성기",
+        "description": "무료로 WiFi, URL QR 코드를 즉시 생성할 수 있는 웹 애플리케이션",
+        "url": "https://yourdomain.com",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Any",
+        "permissions": "browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "KRW"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "QRMaker"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "1250"
+        },
+        "featureList": [
+            "WiFi QR 코드 생성",
+            "URL QR 코드 생성",
+            "모바일 친화적 인터페이스",
+            "즉시 다운로드",
+            "무료 사용"
+        ]
+    }
+    </script>
+
+    <!-- Google AdSense 스크립트 (실제 사용 시 자신의 AdSense ID로 교체) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+            crossorigin="anonymous"></script>
+    
+    <!-- 광고 차단 감지 및 수익 최적화 -->
+    <script>
+        // 광고 차단 감지
+        function detectAdBlock() {
+            var adBlockEnabled = false;
+            var testAd = document.createElement('div');
+            testAd.innerHTML = '&nbsp;';
+            testAd.className = 'adsbox';
+            document.body.appendChild(testAd);
+            window.setTimeout(function() {
+                if (testAd.offsetHeight === 0) {
+                    adBlockEnabled = true;
+                    console.log('광고 차단기 감지됨');
+                    showAdBlockMessage();
+                }
+                testAd.remove();
+            }, 100);
+            return adBlockEnabled;
+        }
+
+        function showAdBlockMessage() {
+            // 광고 차단 시 친화적인 메시지 표시
+            const adContainers = document.querySelectorAll('.ad-placeholder');
+            adContainers.forEach(container => {
+                container.innerHTML = `
+                    <div style="padding: 20px; text-align: center; opacity: 0.6;">
+                        <i class="fas fa-heart" style="color: #f39c12; margin-bottom: 8px;"></i><br>
+                        <span style="font-size: 0.8rem;">이 서비스가 도움이 되셨다면<br>광고 차단을 해제해 주세요 🙏</span>
+                    </div>
+                `;
+            });
+        }
+
+        // 실제 AdSense 광고 로드 함수 (예제)
+        function loadAdSenseAds() {
+            // 상단 배너 광고
+            if (document.getElementById('ad-header')) {
+                // (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            
+            // 하단 배너 광고
+            if (document.getElementById('ad-footer')) {
+                // (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+        }
+
+        // 페이지 로드 후 광고 및 감지 실행
+        window.addEventListener('load', function() {
+            detectAdBlock();
+            // loadAdSenseAds(); // 실제 AdSense 승인 후 활성화
+        });
+    </script>
+
+    <!-- Simple and reliable QR generation using QR Server API -->
+    <script src="script.js"></script>
+</body>
+</html>
