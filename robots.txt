@@ -9,7 +9,7 @@ Allow: /style.css
 Allow: /script.js
 
 # 사이트맵 위치
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://park0838.github.io/qrcode/sitemap.xml
 
 # 크롤링 속도 조절 (선택사항)
 Crawl-delay: 1
