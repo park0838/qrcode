@@ -301,8 +301,6 @@ class QRGenerator {
         if (downloadBtn) downloadBtn.style.display = 'flex';
         if (container) container.classList.add('has-qr');
         
-        // QR 생성 후 광고 표시
-        this.showResultAd(type);
     }
 
     showQRCodeAsImage(type, qrUrl, placeholder, downloadBtn, container) {
@@ -341,23 +339,8 @@ class QRGenerator {
             };
         }
         
-        // QR 생성 후 광고 표시
-        this.showResultAd(type);
     }
 
-    showResultAd(type) {
-        this.log(`💰 Showing result ad for type: ${type}`);
-        
-        const adContainer = document.getElementById(`${type}-ad-result`);
-        if (adContainer) {
-            // 약간의 지연 후 광고 표시 (사용자 경험 고려)
-            setTimeout(() => {
-                adContainer.style.display = 'block';
-                adContainer.style.animation = 'fadeIn 0.5s ease-out';
-                this.log(`💰 Result ad displayed for ${type}`);
-            }, 1000);
-        }
-    }
 
     downloadQR(type) {
         this.log(`💾 Download QR requested for type: ${type}`);
