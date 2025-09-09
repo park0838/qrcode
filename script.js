@@ -1,12 +1,9 @@
-// 간단하고 안정적인 QR 코드 생성기
-// QR Server API를 사용한 실제 작동하는 버전
-
-console.log('🚀 QR Generator script loading...');
+// Simple and reliable QR code generator
+// Working version using QR Server API
 
 class QRGenerator {
     constructor() {
-        console.log('📦 QRGenerator constructor called');
-        this.debugMode = true;
+        this.debugMode = false; // Set to false for production
         this.init();
     }
 
@@ -21,28 +18,22 @@ class QRGenerator {
     }
 
     init() {
-        this.log('🔧 Initializing QRGenerator');
         this.setupTabSwitching();
         this.setupEventListeners();
         this.setupPasswordToggle();
-        this.showNotification('QR 코드 생성기가 준비되었습니다', 'success');
+        this.showNotification('QR Generator ready to use', 'success');
     }
 
     setupTabSwitching() {
-        this.log('🔄 Setting up tab switching');
         
         const tabButtons = document.querySelectorAll('.tab-btn');
         const tabPanels = document.querySelectorAll('.tab-panel');
 
-        this.log('Found tab buttons:', tabButtons.length);
-        this.log('Found tab panels:', tabPanels.length);
 
         tabButtons.forEach((button, index) => {
-            this.log(`Setting up button ${index}:`, button.getAttribute('data-tab'));
             
             button.addEventListener('click', () => {
                 const targetTab = button.getAttribute('data-tab');
-                this.log(`🖱️ Tab clicked: ${targetTab}`);
                 
                 // Remove active class from all buttons and panels
                 tabButtons.forEach(btn => btn.classList.remove('active'));
@@ -53,39 +44,33 @@ class QRGenerator {
                 const targetPanel = document.getElementById(`${targetTab}-tab`);
                 if (targetPanel) {
                     targetPanel.classList.add('active');
-                    this.log(`✅ Switched to tab: ${targetTab}`);
                 } else {
-                    this.error(`❌ Target panel not found: ${targetTab}-tab`);
+                    this.error(`Target panel not found: ${targetTab}-tab`);
                 }
             });
         });
     }
 
     setupEventListeners() {
-        this.log('🎯 Setting up event listeners');
 
         // URL Generate button
         const urlBtn = document.getElementById('url-generate-btn');
         if (urlBtn) {
-            this.log('✅ URL generate button found');
             urlBtn.addEventListener('click', () => {
-                this.log('🖱️ URL generate button clicked');
                 this.generateUrlQR();
             });
         } else {
-            this.error('❌ URL generate button NOT found');
+            this.error('URL generate button NOT found');
         }
 
         // WiFi Generate button
         const wifiBtn = document.getElementById('wifi-generate-btn');
         if (wifiBtn) {
-            this.log('✅ WiFi generate button found');
             wifiBtn.addEventListener('click', () => {
-                this.log('🖱️ WiFi generate button clicked');
                 this.generateWifiQR();
             });
         } else {
-            this.error('❌ WiFi generate button NOT found');
+            this.error('WiFi generate button NOT found');
         }
 
         // Download buttons
@@ -104,7 +89,6 @@ class QRGenerator {
         if (urlInput) {
             urlInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    this.log('⌨️ Enter key pressed in URL input');
                     this.generateUrlQR();
                 }
             });
@@ -112,7 +96,6 @@ class QRGenerator {
     }
 
     setupPasswordToggle() {
-        this.log('👁️ Setting up password toggle');
         
         const passwordToggle = document.getElementById('password-toggle');
         const passwordInput = document.getElementById('wifi-password');
@@ -124,25 +107,22 @@ class QRGenerator {
                 passwordToggle.innerHTML = isPassword ? 
                     '<i class="fas fa-eye-slash"></i>' : 
                     '<i class="fas fa-eye"></i>';
-                this.log(`👁️ Password visibility toggled: ${!isPassword ? 'visible' : 'hidden'}`);
             });
         }
     }
 
     async generateUrlQR() {
-        this.log('🎯 generateUrlQR called');
         
         const input = document.getElementById('url-input');
         const generateBtn = document.getElementById('url-generate-btn');
         const validation = document.getElementById('url-validation');
         
         if (!input) {
-            this.error('❌ URL input element not found');
+            this.error('URL input element not found');
             return;
         }
         
         const text = input.value.trim();
-        this.log('📝 Text to generate QR for:', text);
         
         // Clear previous validation
         if (validation) {
@@ -151,16 +131,14 @@ class QRGenerator {
         }
 
         if (!text) {
-            this.log('⚠️ Empty text provided');
-            this.showValidationError('url-validation', 'URL 또는 텍스트를 입력해 주세요');
+            this.showValidationError('url-validation', 'Please enter URL or text');
             input.focus();
             return;
         }
 
         // Validate URL if it looks like a URL
         if (this.looksLikeUrl(text) && !this.isValidUrl(text)) {
-            this.log('⚠️ Invalid URL provided:', text);
-            this.showValidationError('url-validation', '올바른 URL을 입력해 주세요');
+            this.showValidationError('url-validation', 'Please enter a valid URL');
             return;
         }
 
@@ -171,45 +149,43 @@ class QRGenerator {
             this.log('🔄 Starting QR generation for URL');
             await this.generateQRCode('url', text);
             this.log('✅ URL QR generation successful');
-            this.showValidationSuccess('url-validation', 'QR 코드가 성공적으로 생성되었습니다');
-            this.showNotification('QR 코드가 생성되었습니다', 'success');
+            this.showValidationSuccess('url-validation', 'QR code generated successfully');
+            this.showNotification('QR code generated successfully', 'success');
         } catch (error) {
             this.error('❌ URL QR generation failed:', error);
-            this.showValidationError('url-validation', 'QR 코드 생성 중 오류가 발생했습니다');
-            this.showNotification('QR 코드 생성 실패', 'error');
+            this.showValidationError('url-validation', 'Error occurred during QR code generation');
+            this.showNotification('QR code generation failed', 'error');
         } finally {
             this.setButtonLoading(generateBtn, false);
         }
     }
 
     async generateWifiQR() {
-        this.log('🎯 generateWifiQR called');
         
         const ssidInput = document.getElementById('wifi-ssid');
         const passwordInput = document.getElementById('wifi-password');
         const generateBtn = document.getElementById('wifi-generate-btn');
 
         if (!ssidInput) {
-            this.error('❌ WiFi SSID input not found');
+            this.error('WiFi SSID input not found');
             return;
         }
 
         const ssid = ssidInput.value.trim();
         const password = passwordInput?.value || '';
-        const security = 'WPA'; // 기본값: WPA/WPA2 (가장 일반적)
-        const hidden = false; // 기본값: 숨겨지지 않은 네트워크
+        const security = 'WPA'; // Default: WPA/WPA2 (most common)
+        const hidden = false; // Default: visible network
 
         this.log('📡 WiFi parameters:', { ssid, password: password ? '[HIDDEN]' : '', security, hidden });
 
         if (!ssid) {
-            this.log('⚠️ Empty SSID provided');
-            this.showNotification('네트워크 이름(SSID)을 입력해 주세요', 'error');
+            this.showNotification('Please enter network name (SSID)', 'error');
             ssidInput.focus();
             return;
         }
 
         // Show loading state
-        this.setButtonLoading(generateBtn, true, 'WiFi QR 코드 생성');
+        this.setButtonLoading(generateBtn, true, 'Generate WiFi QR');
 
         try {
             // Create WiFi QR string
@@ -219,17 +195,16 @@ class QRGenerator {
             this.log('🔄 Starting QR generation for WiFi');
             await this.generateQRCode('wifi', wifiString);
             this.log('✅ WiFi QR generation successful');
-            this.showNotification('WiFi QR 코드가 성공적으로 생성되었습니다', 'success');
+            this.showNotification('WiFi QR code generated successfully', 'success');
         } catch (error) {
-            this.error('❌ WiFi QR generation failed:', error);
-            this.showNotification('WiFi QR 코드 생성 중 오류가 발생했습니다', 'error');
+            this.error('WiFi QR generation failed:', error);
+            this.showNotification('WiFi QR code generation failed', 'error');
         } finally {
-            this.setButtonLoading(generateBtn, false, 'WiFi QR 코드 생성');
+            this.setButtonLoading(generateBtn, false, 'Generate WiFi QR');
         }
     }
 
     generateQRCode(type, text) {
-        this.log(`🔄 generateQRCode called for type: ${type}, text: ${text.substring(0, 50)}...`);
         
         return new Promise((resolve, reject) => {
             const canvas = document.getElementById(`${type}-qr-canvas`);
@@ -238,13 +213,12 @@ class QRGenerator {
             const container = document.getElementById(`${type}-qr-container`);
 
             if (!canvas) {
-                this.error(`❌ Canvas element not found: ${type}-qr-canvas`);
+                this.error(`Canvas element not found: ${type}-qr-canvas`);
                 reject(new Error('Canvas element not found'));
                 return;
             }
 
             // Use QR Server API (simple and reliable)
-            this.log('🌐 Using QR Server API');
             const size = 260;
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
             
@@ -255,13 +229,11 @@ class QRGenerator {
             
             // Set timeout for loading
             const timeout = setTimeout(() => {
-                this.log('⏰ QR Server API timeout');
                 reject(new Error('QR generation timeout'));
             }, 10000);
             
             img.onload = () => {
                 clearTimeout(timeout);
-                this.log('✅ QR Server API loaded successfully');
                 
                 try {
                     // Draw the image onto the canvas
@@ -274,27 +246,24 @@ class QRGenerator {
                     this.showQRCode(type, canvas, placeholder, downloadBtn, container);
                     resolve();
                 } catch (error) {
-                    this.error('❌ Error drawing QR to canvas:', error);
+                    this.error('Error drawing QR to canvas:', error);
                     reject(error);
                 }
             };
             
             img.onerror = () => {
                 clearTimeout(timeout);
-                this.log('❌ QR Server API failed, trying fallback method...');
                 
                 // Fallback: Use img element directly instead of canvas
                 this.showQRCodeAsImage(type, qrUrl, placeholder, downloadBtn, container);
                 resolve();
             };
             
-            this.log('🌐 Loading from QR Server API:', qrUrl);
             img.src = qrUrl;
         });
     }
 
     showQRCode(type, canvas, placeholder, downloadBtn, container) {
-        this.log(`📱 Showing QR code for type: ${type}`);
         
         if (placeholder) placeholder.style.display = 'none';
         if (canvas) canvas.style.display = 'block';
@@ -304,7 +273,6 @@ class QRGenerator {
     }
 
     showQRCodeAsImage(type, qrUrl, placeholder, downloadBtn, container) {
-        this.log(`📱 Showing QR code as image for type: ${type}`);
         
         // Create img element as fallback
         const img = document.createElement('img');
@@ -334,8 +302,7 @@ class QRGenerator {
             downloadBtn.style.display = 'flex';
             // Modify download function for image fallback
             downloadBtn.onclick = () => {
-                this.log('📥 Download attempted with image fallback');
-                this.showNotification('이미지를 우클릭하여 저장해주세요', 'info');
+                this.showNotification('Right-click the image to save', 'info');
             };
         }
         
@@ -343,14 +310,12 @@ class QRGenerator {
 
 
     downloadQR(type) {
-        this.log(`💾 Download QR requested for type: ${type}`);
         
         const canvas = document.getElementById(`${type}-qr-canvas`);
         const downloadBtn = document.getElementById(`${type}-download-btn`);
         
         if (!canvas || canvas.style.display === 'none') {
-            this.log('⚠️ No QR code to download');
-            this.showNotification('다운로드할 QR 코드가 없습니다', 'error');
+            this.showNotification('No QR code to download', 'error');
             return;
         }
 
@@ -363,7 +328,7 @@ class QRGenerator {
             // Visual feedback
             if (downloadBtn) {
                 const originalHTML = downloadBtn.innerHTML;
-                downloadBtn.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> Download Complete!';
                 downloadBtn.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
                 
                 setTimeout(() => {
@@ -377,11 +342,10 @@ class QRGenerator {
             link.click();
             document.body.removeChild(link);
             
-            this.log('✅ QR code downloaded successfully');
-            this.showNotification('QR 코드가 다운로드되었습니다', 'success');
+            this.showNotification('QR code downloaded successfully', 'success');
         } catch (error) {
-            this.error('❌ Download failed:', error);
-            this.showNotification('다운로드 실패', 'error');
+            this.error('Download failed:', error);
+            this.showNotification('Download failed', 'error');
         }
     }
 
@@ -407,18 +371,16 @@ class QRGenerator {
         return str.replace(/([\\";,:])/g, '\\$1');
     }
 
-    setButtonLoading(button, loading, originalText = 'QR 코드 생성') {
+    setButtonLoading(button, loading, originalText = 'Generate QR Code') {
         if (!button) return;
         
         if (loading) {
             button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
-            this.log('🔄 Button set to loading state');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
         } else {
             button.disabled = false;
             const icon = button.id.includes('wifi') ? 'fas fa-wifi' : 'fas fa-qrcode';
             button.innerHTML = `<i class="${icon}"></i> ${originalText}`;
-            this.log('✅ Button loading state cleared');
         }
     }
 
@@ -439,7 +401,6 @@ class QRGenerator {
     }
 
     showNotification(message, type = 'info') {
-        this.log(`📢 Notification: ${type} - ${message}`);
         
         // Remove existing notification
         const existingNotification = document.querySelector('.notification');
@@ -495,46 +456,34 @@ class QRGenerator {
 
 // Initialize application
 function initApp() {
-    console.log('🚀 Initializing QR Generator App');
-    
     // Check if DOM is ready
     if (document.readyState === 'loading') {
-        console.log('⏳ DOM still loading, waiting...');
         document.addEventListener('DOMContentLoaded', initApp);
         return;
     }
     
-    console.log('✅ DOM is ready');
-    
     try {
         window.qrGenerator = new QRGenerator();
-        console.log('✅ QR Generator initialized successfully');
         
         // Add loaded class for animations
         setTimeout(() => {
             document.body.classList.add('loaded');
-            console.log('✅ Loaded class added to body');
         }, 100);
         
     } catch (error) {
-        console.error('❌ Failed to initialize QR Generator:', error);
-        
-        // Show error notification
-        alert('QR 코드 생성기 초기화에 실패했습니다. 페이지를 새로고침해 주세요.');
+        console.error('Failed to initialize QR Generator:', error);
+        alert('Failed to initialize QR Generator. Please refresh the page.');
     }
 }
 
 // Start the application
-console.log('📝 Script loaded, starting initialization...');
 initApp();
 
 // Global error handling
 window.addEventListener('error', (e) => {
-    console.error('🚨 Global error:', e.error);
+    console.error('Global error:', e.error);
 });
 
 window.addEventListener('unhandledrejection', (e) => {
-    console.error('🚨 Unhandled promise rejection:', e.reason);
+    console.error('Unhandled promise rejection:', e.reason);
 });
-
-console.log('✅ QR Generator script setup complete');
