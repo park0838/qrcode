@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        
+    <!-- 메인 페이지 -->
+    <url>
+        <loc>https://yourdomain.com/</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- 인덱스 페이지 -->
+    <url>
+        <loc>https://yourdomain.com/index.html</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- 오프라인 버전 (선택사항) -->
+    <url>
+        <loc>https://yourdomain.com/offline-qr-generator.html</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- 간단한 버전 (선택사항) -->
+    <url>
+        <loc>https://yourdomain.com/simple-working-qr.html</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+</urlset>
