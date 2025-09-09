@@ -1,4 +1,5 @@
-// QR Code Generator with Comprehensive Debugging
+// 간단하고 안정적인 QR 코드 생성기
+// QR Server API를 사용한 실제 작동하는 버전
 
 console.log('🚀 QR Generator script loading...');
 
@@ -24,49 +25,7 @@ class QRGenerator {
         this.setupTabSwitching();
         this.setupEventListeners();
         this.setupPasswordToggle();
-        this.testLibraryAvailability();
-    }
-
-    testLibraryAvailability() {
-        this.log('🧪 Testing QRCode library availability');
-        
-        // Wait a bit for the library to load, then check multiple times
-        const checkLibrary = (attempt = 1) => {
-            if (typeof QRCode !== 'undefined') {
-                this.log('✅ QRCode library is available');
-                this.log('QRCode type:', typeof QRCode);
-                this.log('QRCode.toCanvas type:', typeof QRCode.toCanvas);
-                
-                // Test basic generation
-                this.testBasicGeneration();
-                this.showNotification('QRCode 라이브러리 로드 성공', 'success');
-            } else if (attempt < 10) {
-                this.log(`⏳ QRCode library not ready yet, checking again (attempt ${attempt})...`);
-                setTimeout(() => checkLibrary(attempt + 1), 500);
-            } else {
-                this.error('❌ QRCode library is NOT available after 10 attempts');
-                this.showNotification('Google Charts API 사용 중', 'info');
-            }
-        };
-        
-        checkLibrary();
-    }
-
-    testBasicGeneration() {
-        this.log('🧪 Testing basic QR generation');
-        
-        // Create a temporary canvas for testing
-        const testCanvas = document.createElement('canvas');
-        testCanvas.width = 100;
-        testCanvas.height = 100;
-        
-        QRCode.toCanvas(testCanvas, 'Test', { width: 100 }, (error) => {
-            if (error) {
-                this.error('❌ Basic QR generation test failed:', error);
-            } else {
-                this.log('✅ Basic QR generation test passed');
-            }
-        });
+        this.showNotification('QR 코드 생성기가 준비되었습니다', 'success');
     }
 
     setupTabSwitching() {
@@ -140,7 +99,7 @@ class QRGenerator {
             wifiDownloadBtn.addEventListener('click', () => this.downloadQR('wifi'));
         }
 
-        // Enter key support
+        // Enter key support for URL input
         const urlInput = document.getElementById('url-input');
         if (urlInput) {
             urlInput.addEventListener('keypress', (e) => {
@@ -228,8 +187,6 @@ class QRGenerator {
         
         const ssidInput = document.getElementById('wifi-ssid');
         const passwordInput = document.getElementById('wifi-password');
-        const securitySelect = document.getElementById('wifi-security');
-        const hiddenCheckbox = document.getElementById('wifi-hidden');
         const generateBtn = document.getElementById('wifi-generate-btn');
 
         if (!ssidInput) {
@@ -239,8 +196,8 @@ class QRGenerator {
 
         const ssid = ssidInput.value.trim();
         const password = passwordInput?.value || '';
-        const security = securitySelect?.value || 'WPA';
-        const hidden = hiddenCheckbox?.checked || false;
+        const security = 'WPA'; // 기본값: WPA/WPA2 (가장 일반적)
+        const hidden = false; // 기본값: 숨겨지지 않은 네트워크
 
         this.log('📡 WiFi parameters:', { ssid, password: password ? '[HIDDEN]' : '', security, hidden });
 
@@ -286,99 +243,54 @@ class QRGenerator {
                 return;
             }
 
-            // Primary Method: Use Google Charts (more reliable)
-            this.log('🌐 Using Google Charts API (primary method)');
-            this.generateWithGoogleCharts(type, text, resolve, reject, () => {
-                // Fallback to qrcode.js if Google Charts fails
-                if (typeof QRCode !== 'undefined') {
-                    this.log('🔧 Falling back to qrcode.js library');
-                    
-                    QRCode.toCanvas(canvas, text, {
-                        width: 260,
-                        margin: 2,
-                        color: {
-                            dark: '#000000',
-                            light: '#FFFFFF'
-                        },
-                        errorCorrectionLevel: 'M'
-                    }, (error) => {
-                        if (error) {
-                            this.error('❌ Both methods failed:', error);
-                            reject(new Error('Both QR generation methods failed'));
-                        } else {
-                            this.log('✅ qrcode.js fallback successful');
-                            this.showQRCode(type, canvas, placeholder, downloadBtn, container);
-                            resolve();
-                        }
-                    });
-                } else {
-                    this.error('❌ Both methods failed - no QRCode library available');
-                    reject(new Error('Both QR generation methods failed'));
-                }
-            });
-        });
-    }
-
-    generateWithGoogleCharts(type, text, resolve, reject, fallbackCallback = null) {
-        this.log('🌐 Using Google Charts API');
-        
-        const canvas = document.getElementById(`${type}-qr-canvas`);
-        const placeholder = document.getElementById(`${type}-qr-placeholder`);
-        const downloadBtn = document.getElementById(`${type}-download-btn`);
-        const container = document.getElementById(`${type}-qr-container`);
-        
-        // Create an image element to load from Google Charts
-        const img = new Image();
-        const encodedText = encodeURIComponent(text);
-        const size = '260x260';
-        const url = `https://chart.googleapis.com/chart?chs=${size}&cht=qr&chl=${encodedText}`;
-        
-        // Set timeout for loading
-        const timeout = setTimeout(() => {
-            this.log('⏰ Google Charts timeout, trying fallback...');
-            if (fallbackCallback) {
-                fallbackCallback();
-            } else {
-                reject(new Error('Google Charts API timeout'));
-            }
-        }, 5000);
-        
-        img.onload = () => {
-            clearTimeout(timeout);
-            this.log('✅ Google Charts QR loaded successfully');
+            // Use QR Server API (simple and reliable)
+            this.log('🌐 Using QR Server API');
+            const size = 260;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`;
             
-            try {
-                // Draw the image onto the canvas
-                const ctx = canvas.getContext('2d');
-                canvas.width = 260;
-                canvas.height = 260;
-                ctx.clearRect(0, 0, 260, 260);
-                ctx.drawImage(img, 0, 0, 260, 260);
+            // Create an image element to load the QR code
+            const img = new Image();
+            // Try with CORS first, fallback without if needed
+            img.crossOrigin = 'anonymous';
+            
+            // Set timeout for loading
+            const timeout = setTimeout(() => {
+                this.log('⏰ QR Server API timeout');
+                reject(new Error('QR generation timeout'));
+            }, 10000);
+            
+            img.onload = () => {
+                clearTimeout(timeout);
+                this.log('✅ QR Server API loaded successfully');
                 
-                this.showQRCode(type, canvas, placeholder, downloadBtn, container);
-                resolve();
-            } catch (error) {
-                this.error('❌ Error drawing Google Charts QR:', error);
-                if (fallbackCallback) {
-                    fallbackCallback();
-                } else {
+                try {
+                    // Draw the image onto the canvas
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = size;
+                    canvas.height = size;
+                    ctx.clearRect(0, 0, size, size);
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    this.showQRCode(type, canvas, placeholder, downloadBtn, container);
+                    resolve();
+                } catch (error) {
+                    this.error('❌ Error drawing QR to canvas:', error);
                     reject(error);
                 }
-            }
-        };
-        
-        img.onerror = () => {
-            clearTimeout(timeout);
-            this.log('❌ Google Charts API failed, trying fallback...');
-            if (fallbackCallback) {
-                fallbackCallback();
-            } else {
-                reject(new Error('Google Charts API failed'));
-            }
-        };
-        
-        this.log('🌐 Loading from Google Charts:', url);
-        img.src = url;
+            };
+            
+            img.onerror = () => {
+                clearTimeout(timeout);
+                this.log('❌ QR Server API failed, trying fallback method...');
+                
+                // Fallback: Use img element directly instead of canvas
+                this.showQRCodeAsImage(type, qrUrl, placeholder, downloadBtn, container);
+                resolve();
+            };
+            
+            this.log('🌐 Loading from QR Server API:', qrUrl);
+            img.src = qrUrl;
+        });
     }
 
     showQRCode(type, canvas, placeholder, downloadBtn, container) {
@@ -388,6 +300,63 @@ class QRGenerator {
         if (canvas) canvas.style.display = 'block';
         if (downloadBtn) downloadBtn.style.display = 'flex';
         if (container) container.classList.add('has-qr');
+        
+        // QR 생성 후 광고 표시
+        this.showResultAd(type);
+    }
+
+    showQRCodeAsImage(type, qrUrl, placeholder, downloadBtn, container) {
+        this.log(`📱 Showing QR code as image for type: ${type}`);
+        
+        // Create img element as fallback
+        const img = document.createElement('img');
+        img.src = qrUrl;
+        img.style.cssText = `
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+            width: 260px;
+            height: 260px;
+        `;
+        img.alt = 'QR Code';
+        
+        // Replace placeholder with image
+        if (placeholder) {
+            placeholder.style.display = 'none';
+        }
+        
+        // Add image to container
+        if (container) {
+            container.appendChild(img);
+            container.classList.add('has-qr');
+        }
+        
+        // Show download button (but it won't work without canvas)
+        if (downloadBtn) {
+            downloadBtn.style.display = 'flex';
+            // Modify download function for image fallback
+            downloadBtn.onclick = () => {
+                this.log('📥 Download attempted with image fallback');
+                this.showNotification('이미지를 우클릭하여 저장해주세요', 'info');
+            };
+        }
+        
+        // QR 생성 후 광고 표시
+        this.showResultAd(type);
+    }
+
+    showResultAd(type) {
+        this.log(`💰 Showing result ad for type: ${type}`);
+        
+        const adContainer = document.getElementById(`${type}-ad-result`);
+        if (adContainer) {
+            // 약간의 지연 후 광고 표시 (사용자 경험 고려)
+            setTimeout(() => {
+                adContainer.style.display = 'block';
+                adContainer.style.animation = 'fadeIn 0.5s ease-out';
+                this.log(`💰 Result ad displayed for ${type}`);
+            }, 1000);
+        }
     }
 
     downloadQR(type) {
@@ -398,6 +367,7 @@ class QRGenerator {
         
         if (!canvas || canvas.style.display === 'none') {
             this.log('⚠️ No QR code to download');
+            this.showNotification('다운로드할 QR 코드가 없습니다', 'error');
             return;
         }
 
@@ -408,14 +378,16 @@ class QRGenerator {
             link.href = canvas.toDataURL('image/png');
             
             // Visual feedback
-            const originalHTML = downloadBtn.innerHTML;
-            downloadBtn.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
-            downloadBtn.style.background = 'var(--success-gradient)';
-            
-            setTimeout(() => {
-                downloadBtn.innerHTML = originalHTML;
-                downloadBtn.style.background = '';
-            }, 2000);
+            if (downloadBtn) {
+                const originalHTML = downloadBtn.innerHTML;
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> 다운로드 완료!';
+                downloadBtn.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+                
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalHTML;
+                    downloadBtn.style.background = '';
+                }, 2000);
+            }
             
             // Trigger download
             document.body.appendChild(link);
@@ -457,7 +429,7 @@ class QRGenerator {
         
         if (loading) {
             button.disabled = true;
-            button.innerHTML = '<div class="loading"></div> 생성 중...';
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 생성 중...';
             this.log('🔄 Button set to loading state');
         } else {
             button.disabled = false;
@@ -516,7 +488,8 @@ class QRGenerator {
             font-size: 0.9rem;
             font-weight: 500;
             max-width: 300px;
-            animation: slideInRight 0.3s ease-out;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
         `;
 
         const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : 'ℹ️';
@@ -524,8 +497,14 @@ class QRGenerator {
         
         document.body.appendChild(notification);
         
+        // Animate in
         setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease-in forwards';
+            notification.style.transform = 'translateX(0)';
+        }, 10);
+        
+        // Animate out and remove
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
             setTimeout(() => notification.remove(), 300);
         }, 3000);
     }
@@ -561,21 +540,6 @@ function initApp() {
         alert('QR 코드 생성기 초기화에 실패했습니다. 페이지를 새로고침해 주세요.');
     }
 }
-
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(100%); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    
-    @keyframes slideOutRight {
-        from { opacity: 1; transform: translateX(0); }
-        to { opacity: 0; transform: translateX(100%); }
-    }
-`;
-document.head.appendChild(style);
 
 // Start the application
 console.log('📝 Script loaded, starting initialization...');
