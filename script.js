@@ -52,37 +52,14 @@ class QRGenerator {
     }
 
     setupEventListeners() {
-
-        // URL Generate button
-        const urlBtn = document.getElementById('url-generate-btn');
-        if (urlBtn) {
-            urlBtn.addEventListener('click', () => {
+        // Add generateQR method for HTML onclick compatibility
+        window.qrGenerator.generateQR = (type) => {
+            if (type === 'url') {
                 this.generateUrlQR();
-            });
-        } else {
-            this.error('URL generate button NOT found');
-        }
-
-        // WiFi Generate button
-        const wifiBtn = document.getElementById('wifi-generate-btn');
-        if (wifiBtn) {
-            wifiBtn.addEventListener('click', () => {
+            } else if (type === 'wifi') {
                 this.generateWifiQR();
-            });
-        } else {
-            this.error('WiFi generate button NOT found');
-        }
-
-        // Download buttons
-        const urlDownloadBtn = document.getElementById('url-download-btn');
-        const wifiDownloadBtn = document.getElementById('wifi-download-btn');
-        
-        if (urlDownloadBtn) {
-            urlDownloadBtn.addEventListener('click', () => this.downloadQR('url'));
-        }
-        if (wifiDownloadBtn) {
-            wifiDownloadBtn.addEventListener('click', () => this.downloadQR('wifi'));
-        }
+            }
+        };
 
         // Enter key support for URL input
         const urlInput = document.getElementById('url-input');
@@ -146,13 +123,11 @@ class QRGenerator {
         this.setButtonLoading(generateBtn, true);
 
         try {
-            this.log('🔄 Starting QR generation for URL');
             await this.generateQRCode('url', text);
-            this.log('✅ URL QR generation successful');
             this.showValidationSuccess('url-validation', 'QR code generated successfully');
             this.showNotification('QR code generated successfully', 'success');
         } catch (error) {
-            this.error('❌ URL QR generation failed:', error);
+            this.error('URL QR generation failed:', error);
             this.showValidationError('url-validation', 'Error occurred during QR code generation');
             this.showNotification('QR code generation failed', 'error');
         } finally {
@@ -176,7 +151,6 @@ class QRGenerator {
         const security = 'WPA'; // Default: WPA/WPA2 (most common)
         const hidden = false; // Default: visible network
 
-        this.log('📡 WiFi parameters:', { ssid, password: password ? '[HIDDEN]' : '', security, hidden });
 
         if (!ssid) {
             this.showNotification('Please enter network name (SSID)', 'error');
@@ -190,11 +164,7 @@ class QRGenerator {
         try {
             // Create WiFi QR string
             const wifiString = `WIFI:T:${security};S:${this.escapeWifiString(ssid)};P:${this.escapeWifiString(password)};H:${hidden ? 'true' : 'false'};;`;
-            this.log('📡 WiFi QR string:', wifiString);
-            
-            this.log('🔄 Starting QR generation for WiFi');
             await this.generateQRCode('wifi', wifiString);
-            this.log('✅ WiFi QR generation successful');
             this.showNotification('WiFi QR code generated successfully', 'success');
         } catch (error) {
             this.error('WiFi QR generation failed:', error);
