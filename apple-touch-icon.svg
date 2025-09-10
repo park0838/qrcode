@@ -1,0 +1,70 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="apple-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="apple-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background with iOS rounded corners -->
+  <rect x="0" y="0" width="180" height="180" rx="30" fill="url(#apple-gradient)" />
+  
+  <!-- QR Code pattern -->
+  <g fill="white">
+    <!-- Corner squares -->
+    <rect x="22" y="22" width="32" height="32" rx="4"/>
+    <rect x="126" y="22" width="32" height="32" rx="4"/>
+    <rect x="22" y="126" width="32" height="32" rx="4"/>
+    
+    <!-- Corner square centers -->
+    <rect x="28" y="28" width="20" height="20" rx="2" fill="url(#apple-gradient)"/>
+    <rect x="132" y="28" width="20" height="20" rx="2" fill="url(#apple-gradient)"/>
+    <rect x="28" y="132" width="20" height="20" rx="2" fill="url(#apple-gradient)"/>
+    
+    <!-- Data pattern -->
+    <rect x="68" y="32" width="7" height="7" rx="1"/>
+    <rect x="80" y="32" width="7" height="7" rx="1"/>
+    <rect x="92" y="32" width="7" height="7" rx="1"/>
+    <rect x="104" y="32" width="7" height="7" rx="1"/>
+    
+    <rect x="68" y="44" width="7" height="7" rx="1"/>
+    <rect x="92" y="44" width="7" height="7" rx="1"/>
+    <rect x="104" y="44" width="7" height="7" rx="1"/>
+    
+    <rect x="68" y="56" width="7" height="7" rx="1"/>
+    <rect x="80" y="56" width="7" height="7" rx="1"/>
+    <rect x="104" y="56" width="7" height="7" rx="1"/>
+    
+    <!-- Center pattern -->
+    <rect x="74" y="74" width="32" height="32" rx="4"/>
+    <rect x="80" y="80" width="20" height="20" rx="2" fill="url(#apple-accent)"/>
+    
+    <!-- Bottom pattern -->
+    <rect x="68" y="126" width="7" height="7" rx="1"/>
+    <rect x="80" y="126" width="7" height="7" rx="1"/>
+    <rect x="92" y="126" width="7" height="7" rx="1"/>
+    <rect x="104" y="126" width="7" height="7" rx="1"/>
+    
+    <rect x="68" y="138" width="7" height="7" rx="1"/>
+    <rect x="92" y="138" width="7" height="7" rx="1"/>
+    
+    <rect x="68" y="150" width="7" height="7" rx="1"/>
+    <rect x="80" y="150" width="7" height="7" rx="1"/>
+    <rect x="92" y="150" width="7" height="7" rx="1"/>
+    
+    <!-- Right side pattern -->
+    <rect x="126" y="68" width="7" height="7" rx="1"/>
+    <rect x="138" y="68" width="7" height="7" rx="1"/>
+    <rect x="150" y="68" width="7" height="7" rx="1"/>
+    <rect x="126" y="80" width="7" height="7" rx="1"/>
+    <rect x="138" y="80" width="7" height="7" rx="1"/>
+    <rect x="150" y="80" width="7" height="7" rx="1"/>
+    <rect x="126" y="92" width="7" height="7" rx="1"/>
+    <rect x="138" y="92" width="7" height="7" rx="1"/>
+    <rect x="150" y="92" width="7" height="7" rx="1"/>
+  </g>
+</svg>
