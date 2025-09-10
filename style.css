@@ -693,149 +693,174 @@ body {
     50% { transform: scale(1.1); }
 }
 
-/* Responsive design */
+/* Mobile and Tablet Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: var(--spacing-md);
-        max-width: 100%;
+        padding: var(--spacing-sm);
+        gap: var(--spacing-md);
     }
     
     .header {
-        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md) 0;
+        text-align: center;
     }
     
     .logo h1 {
-        font-size: 2.2rem;
+        font-size: 2rem;
         line-height: 1.2;
     }
     
-    .logo .subtitle {
-        font-size: 1rem;
-        margin-top: var(--spacing-xs);
+    .subtitle {
+        font-size: 0.95rem;
     }
     
     .tab-container {
         padding: var(--spacing-md);
-        margin: 0 -var(--spacing-xs);
-        border-radius: var(--radius-md);
+        margin: 0;
+        border-radius: var(--radius-lg);
     }
     
     .tab-navigation {
-        gap: var(--spacing-xs);
-        margin-bottom: var(--spacing-lg);
+        gap: 4px;
+        margin-bottom: var(--spacing-md);
+        padding: 4px;
     }
     
     .tab-btn {
         font-size: 0.9rem;
-        padding: var(--spacing-sm) var(--spacing-md);
-        min-width: auto;
-        flex: 1;
+        padding: 12px 16px;
+        min-height: 48px;
+        border-radius: 8px;
     }
     
     .tab-panel.active {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-        padding: var(--spacing-md);
+        gap: var(--spacing-md);
+        padding: 0;
+        min-height: auto;
     }
     
     .form-section {
         order: 1;
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .form-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-sm);
     }
     
     .result-section {
         order: 2;
-        margin-top: var(--spacing-md);
+        padding: var(--spacing-md);
+        min-height: auto;
+        margin-top: 0;
     }
     
     .qr-container {
-        width: 250px;
-        height: 250px;
-        margin: 0 auto var(--spacing-md);
+        width: 240px;
+        height: 240px;
+        margin: 0 auto;
     }
     
     .form-group {
         margin-bottom: var(--spacing-md);
     }
     
-    .form-group label {
-        font-size: 0.9rem;
-        margin-bottom: var(--spacing-xs);
-    }
-    
     .form-input {
-        font-size: 16px; /* Prevents iOS zoom */
-        padding: 16px 20px;
+        font-size: 16px;
+        padding: 14px 16px;
+        min-height: 48px;
     }
     
     .generate-btn {
-        font-size: 1.1rem;
-        padding: 18px 24px;
+        font-size: 1rem;
+        padding: 16px 24px;
         margin-top: var(--spacing-md);
-        min-height: 54px;
+        min-height: 52px;
+        text-transform: none;
+        letter-spacing: 0;
     }
     
-    .form-section {
-        padding: var(--spacing-lg);
-    }
-    
-    .result-section {
-        padding: var(--spacing-lg);
-        min-height: 400px;
+    .wifi-tip {
+        font-size: 0.9rem;
+        padding: 16px;
+        margin: var(--spacing-md) 0;
     }
     
     .download-btn {
         font-size: 0.9rem;
-        padding: var(--spacing-sm) var(--spacing-md);
+        padding: 12px 20px;
         margin-top: var(--spacing-sm);
+        min-height: 48px;
     }
 }
 
+/* Small Mobile Devices */
 @media (max-width: 480px) {
     .container {
-        padding: var(--spacing-sm);
+        padding: 12px;
     }
     
     .header {
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .logo {
-        flex-direction: column;
-        gap: var(--spacing-xs);
-        text-align: center;
+        padding: var(--spacing-sm) 0;
     }
     
     .logo h1 {
         font-size: 1.8rem;
-        line-height: 1.1;
     }
     
-    .logo .subtitle {
+    .subtitle {
         font-size: 0.85rem;
-        opacity: 0.9;
     }
     
     .tab-container {
-        padding: var(--spacing-sm);
-        margin: 0;
-        border-radius: var(--radius-sm);
-    }
-    
-    .tab-navigation {
-        margin-bottom: var(--spacing-md);
-        gap: var(--spacing-xs);
+        padding: 12px;
     }
     
     .tab-btn {
         font-size: 0.85rem;
-        padding: var(--spacing-sm);
-        border-radius: var(--radius-sm);
-        white-space: nowrap;
+        padding: 10px 12px;
+        min-height: 44px;
     }
     
-    .tab-panel.active {
-        padding: var(--spacing-sm);
-        gap: var(--spacing-md);
+    .form-section {
+        padding: 16px;
+    }
+    
+    .form-section h2 {
+        font-size: 1.3rem;
+    }
+    
+    .result-section {
+        padding: 16px;
+    }
+    
+    .qr-container {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .form-input {
+        padding: 12px 14px;
+        min-height: 44px;
+    }
+    
+    .generate-btn {
+        font-size: 0.95rem;
+        padding: 14px 20px;
+        min-height: 48px;
+    }
+    
+    .wifi-tip {
+        font-size: 0.85rem;
+        padding: 12px;
+    }
+    
+    .download-btn {
+        padding: 10px 16px;
+        min-height: 44px;
     }
     
     .form-group {
