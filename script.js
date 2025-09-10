@@ -52,14 +52,6 @@ class QRGenerator {
     }
 
     setupEventListeners() {
-        // Add generateQR method for HTML onclick compatibility
-        window.qrGenerator.generateQR = (type) => {
-            if (type === 'url') {
-                this.generateUrlQR();
-            } else if (type === 'wifi') {
-                this.generateWifiQR();
-            }
-        };
 
         // Enter key support for URL input
         const urlInput = document.getElementById('url-input');
@@ -421,6 +413,15 @@ class QRGenerator {
             notification.style.transform = 'translateX(100%)';
             setTimeout(() => notification.remove(), 300);
         }, 3000);
+    }
+
+    // Method for HTML onclick compatibility
+    generateQR(type) {
+        if (type === 'url') {
+            this.generateUrlQR();
+        } else if (type === 'wifi') {
+            this.generateWifiQR();
+        }
     }
 }
 
